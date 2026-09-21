@@ -1,32 +1,47 @@
-class Product{
-  final String id;
+import 'dart:core';
+
+class Product {
+  final int id;
   final String name;
+  final int price;
   final String? image;
-  final double price;
   final String? description;
 
-  Product({required this.id, required this.name, this.image, required this.price, this.description});
-  Product toCopy({String? id, String? name, String? image, double? price, String? description}){
-    return Product(id:id??this.id,name:name??this.name,image:image??this.image,
-        price:price??this.price,description:description??this.description);
-  }
+  const Product({
+    required this.id,
+    required this.name,
+    required this.price,
+    this.image,
+    this.description,
+  });
 
-  //Chuyển đổi từ JSON sang đối tượng Product
-  factory Product.fromJson(Map<String, dynamic> json){
-    return Product(id: (json['id']??"") as String,
-        name: (json['name']??"") as String,
-        image: (json['image']??"") as String,
-        price: (json['price'] as num).toDouble(),
-        description: (json['description']??"") as String);
-  }
-  //Chuyển đổi từ Product sang đối tượng JSON
-  Map<String, dynamic> toJson(){
-    return {
-      'id': id,
-      'name': name,
-      'image': image,
-      'price': price,
-      'description': description
-    };
-  }
+  Product copyTo({
+    int? id,
+    String? name,
+    String? image,
+    int? price,
+    String? description,
+  }) => Product(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    price: price ?? this.price,
+    image: image ?? this.image,
+    description: description ?? this.description,
+  );
+
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+    id: json["id"],
+    name: json["name"],
+    price: json["price"],
+    image: json["image"],
+    description: json["description"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "price": price,
+    "image": image,
+    "description": description,
+  };
 }
