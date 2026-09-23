@@ -3,6 +3,82 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lab/main.dart';
 
 void main() {
+  testWidgets('Exercise 4 changes app theme and the FAB shows feedback', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.tap(find.text('Exercise 4 – App Structure & Theme'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
+      ThemeMode.dark,
+    );
+    expect(
+      Theme.of(tester.element(find.byType(Switch))).brightness,
+      Brightness.dark,
+    );
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Hello from Exercise 4!'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(
+      Theme.of(tester.element(find.text('Lab 4 – Flutter UI Fundamentals')))
+          .brightness,
+      Brightness.dark,
+    );
+    await tester.tap(find.text('Exercise 4 – App Structure & Theme'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
+      ThemeMode.light,
+    );
+  });
+
+  testWidgets('Exercise 5 works on a small screen with large text', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 480);
+    tester.view.devicePixelRatio = 1;
+    tester.platformDispatcher.textScaleFactorTestValue = 1.5;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await tester.pumpWidget(const MyApp());
+    await tester.scrollUntilVisible(
+      find.text('Exercise 5 – Common UI Fixes'),
+      150,
+    );
+    await tester.ensureVisible(find.text('Exercise 5 – Common UI Fixes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Exercise 5 – Common UI Fixes'));
+    await tester.pumpAndSettle();
+    expect(find.text('Movie A'), findsOneWidget);
+    final outer = find.byType(SingleChildScrollView);
+    await tester.drag(outer, const Offset(0, -350));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Increment counter'));
+    await tester.tap(find.text('Increment counter'));
+    await tester.pump();
+    expect(find.text('Counter: 1'), findsOneWidget);
+    await tester.ensureVisible(find.text('Open Date Picker'));
+    await tester.tap(find.text('Open Date Picker'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(find.text('Selected date: None'), findsOneWidget);
+    await tester.tap(find.text('Open Date Picker'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+    expect(find.text('Selected date: None'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('Exercise 3 scrolls on a small screen and returns home', (
     tester,
   ) async {

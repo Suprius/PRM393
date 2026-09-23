@@ -4,6 +4,8 @@ import '../widgets/home_page_lab4_list_item.dart';
 import 'core_widgets_demo.dart';
 import 'input_controls_demo.dart';
 import 'layout_demo.dart';
+import 'app_structure_demo.dart';
+import 'common_ui_fixes_demo.dart';
 
 class HomePageLab4 extends StatelessWidget {
   const HomePageLab4({super.key});
@@ -27,6 +29,16 @@ class HomePageLab4 extends StatelessWidget {
         HomePageLab4ListItem(
           title: 'Exercise 3 – Layout Demo',
           destination: LayoutDemo(),
+        ),
+        SizedBox(height: 12),
+        HomePageLab4ListItem(
+          title: 'Exercise 4 – App Structure & Theme',
+          destination: AppStructureDemo(),
+        ),
+        SizedBox(height: 12),
+        HomePageLab4ListItem(
+          title: 'Exercise 5 – Common UI Fixes',
+          destination: CommonUiFixesDemo(),
         ),
       ],
     ),
