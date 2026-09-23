@@ -3,6 +3,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lab/main.dart';
 
 void main() {
+  testWidgets('Exercise 3 scrolls on a small screen and returns home', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 480);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(const MyApp());
+    await tester.tap(find.text('Exercise 3 – Layout Demo'));
+    await tester.pumpAndSettle();
+    expect(find.text('Now Playing'), findsOneWidget);
+    expect(find.text('Avatar'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Joker'), 100);
+    expect(find.text('Joker').hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('Lab 4 – Flutter UI Fundamentals'), findsOneWidget);
+  });
+
   testWidgets('Exercise 1 opens the core widgets and returns home', (
     tester,
   ) async {
