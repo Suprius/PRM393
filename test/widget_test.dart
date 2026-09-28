@@ -7,6 +7,8 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(const MyApp());
+    await tester.tap(find.byTooltip('Lab 4 exercises'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Exercise 4 – App Structure & Theme'));
     await tester.pumpAndSettle();
     await tester.tap(find.byType(Switch));
@@ -49,6 +51,8 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     await tester.pumpWidget(const MyApp());
+    await tester.tap(find.byTooltip('Lab 4 exercises'));
+    await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.text('Exercise 5 – Common UI Fixes'),
       150,
@@ -87,6 +91,8 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(const MyApp());
+    await tester.tap(find.byTooltip('Lab 4 exercises'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Exercise 3 – Layout Demo'));
     await tester.pumpAndSettle();
     expect(find.text('Now Playing'), findsOneWidget);
@@ -103,6 +109,8 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(const MyApp());
+    await tester.tap(find.byTooltip('Lab 4 exercises'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Exercise 1 – Core Widgets Demo'));
     await tester.pumpAndSettle();
     expect(find.text('Welcome to Flutter UI'), findsOneWidget);
@@ -118,6 +126,8 @@ void main() {
     'Exercise 2 updates controls and handles date confirmation/cancel',
     (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.tap(find.byTooltip('Lab 4 exercises'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Exercise 2 – Input Controls Demo'));
       await tester.pumpAndSettle();
       expect(find.text('Current value: 50'), findsOneWidget);

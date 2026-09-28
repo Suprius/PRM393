@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'ui/screens/home_page_lab4.dart';
+import 'ui/screens/products_page.dart';
 import 'ui/theme_controller.dart';
 
 void main() => runApp(const MyApp());
@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
       valueListenable: _themeMode,
       builder: (context, mode, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Lab 4 – Flutter UI Fundamentals',
+        title: 'Products',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         themeMode: mode,
-        home: const HomePageLab4(),
+        home: const ProductsPage(),
       ),
     ),
   );
