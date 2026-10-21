@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../Screens/post_page.dart';
 import '../../dao/product_dao.dart';
 import '../../models/product.dart';
+import '../../providers/cart_provider.dart';
 import '../widgets/product_widget.dart';
 import 'home_page_lab4.dart';
 import 'product_detail_page.dart';
+import 'cart_page.dart';
 
-class ProductsPage extends StatefulWidget {
+class ProductsPage extends ConsumerStatefulWidget {
   const ProductsPage({super.key});
 
   @override
-  State<ProductsPage> createState() => _ProductsPageState();
+  ConsumerState<ProductsPage> createState() => _ProductsPageState();
 }
 
-class _ProductsPageState extends State<ProductsPage> {
+class _ProductsPageState extends ConsumerState<ProductsPage> {
   final _dao = const ProductDAO();
   final _search = TextEditingController();
-  final List<Product> _cart = [];
   late List<Product> _products = _dao.getAllProduct();
   Product? _selectedProduct;
 
@@ -37,7 +40,7 @@ class _ProductsPageState extends State<ProductsPage> {
         builder: (detailContext) => ProductDetailPage(
           product: product,
           onAddToCart: () {
-            _cart.add(product);
+            ref.read(cartControllerProvider.notifier).addProduct(product);
             ScaffoldMessenger.of(detailContext)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -51,50 +54,8 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   void _openCart(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      useSafeArea: true,
-      builder: (context) => StatefulBuilder(
-        builder: (context, updateCart) => Column(
-          children: [
-            Text('Cart', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 12),
-            Expanded(
-              child: _cart.isEmpty
-                  ? const Center(child: Text('Your cart is empty'))
-                  : ListView.builder(
-                      itemCount: _cart.length,
-                      itemBuilder: (context, index) {
-                        final product = _cart[index];
-                        return ListTile(
-                          leading: SizedBox(
-                            width: 48,
-                            child: ProductImage(product: product),
-                          ),
-                          title: Text(product.name),
-                          subtitle: Text(formatPrice(product.discountedPrice)),
-                          trailing: IconButton(
-                            tooltip: 'Remove ${product.name}',
-                            icon: const Icon(Icons.delete_outline),
-                            onPressed: () =>
-                                updateCart(() => _cart.removeAt(index)),
-                          ),
-                        );
-                      },
-                    ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                'Total: ${formatPrice(_cart.fold<double>(0, (sum, product) => sum + product.discountedPrice))}',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => const CartPage()));
   }
 
   @override
@@ -108,6 +69,12 @@ class _ProductsPageState extends State<ProductsPage> {
       backgroundColor: productBlue,
       foregroundColor: Colors.white,
       actions: [
+        IconButton(
+          tooltip: 'Posts',
+          icon: const Icon(Icons.article_outlined),
+          onPressed: () => Navigator.of(context)
+              .push(MaterialPageRoute<void>(builder: (_) => const PostPage())),
+        ),
         IconButton(
           tooltip: 'Lab 4 exercises',
           icon: const Icon(Icons.school_outlined),

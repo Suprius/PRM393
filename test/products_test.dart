@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lab/dao/product_dao.dart';
 import 'package:lab/main.dart';
@@ -82,10 +83,12 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Align(
-          alignment: Alignment.topLeft,
-          child: SizedBox(width: 450, child: ProductsPage()),
+      const ProviderScope(
+        child: MaterialApp(
+          home: Align(
+            alignment: Alignment.topLeft,
+            child: SizedBox(width: 450, child: ProductsPage()),
+          ),
         ),
       ),
     );

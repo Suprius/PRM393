@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'ui/screens/products_page.dart';
 import 'ui/theme_controller.dart';
@@ -22,24 +23,26 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) => ThemeController(
-    notifier: _themeMode,
-    child: ValueListenableBuilder<ThemeMode>(
-      valueListenable: _themeMode,
-      builder: (context, mode, child) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Products',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        ),
-        darkTheme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.deepPurple,
-            brightness: Brightness.dark,
+  Widget build(BuildContext context) => ProviderScope(
+    child: ThemeController(
+      notifier: _themeMode,
+      child: ValueListenableBuilder<ThemeMode>(
+        valueListenable: _themeMode,
+        builder: (context, mode, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Products',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           ),
+          darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.deepPurple,
+              brightness: Brightness.dark,
+            ),
+          ),
+          themeMode: mode,
+          home: const ProductsPage(),
         ),
-        themeMode: mode,
-        home: const ProductsPage(),
       ),
     ),
   );

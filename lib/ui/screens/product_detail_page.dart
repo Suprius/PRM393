@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/product.dart';
+import '../../providers/cart_provider.dart';
 import '../widgets/product_widget.dart';
 
 class ProductDetailPage extends StatelessWidget {
@@ -97,7 +99,7 @@ class ProductDetailPage extends StatelessWidget {
   );
 }
 
-class ProductNavigationBar extends StatelessWidget {
+class ProductNavigationBar extends ConsumerWidget {
   const ProductNavigationBar({
     super.key,
     required this.currentIndex,
@@ -107,17 +109,29 @@ class ProductNavigationBar extends StatelessWidget {
   final ValueChanged<int> onTap;
 
   @override
-  Widget build(BuildContext context) => BottomNavigationBar(
-    currentIndex: currentIndex,
-    onTap: onTap,
-    selectedItemColor: productBlue,
-    items: const [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.article_outlined),
-        label: 'Product Detail',
-      ),
-      BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
-    ],
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(
+      cartControllerProvider.select((cart) => cart.itemCount),
+    );
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      onTap: onTap,
+      selectedItemColor: productBlue,
+      items: [
+        const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.article_outlined),
+          label: 'Product Detail',
+        ),
+        BottomNavigationBarItem(
+          icon: Badge.count(
+            count: count,
+            isLabelVisible: count > 0,
+            child: const Icon(Icons.shopping_cart),
+          ),
+          label: 'Cart',
+        ),
+      ],
+    );
+  }
 }
